@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
 
-function App() {
+import React, { useState, useEffect } from 'react';
+import ProductList from './ProductList';
+import Cart from './Cart';
+import { fetchProducts } from './api';
+
+const App = () => {
+  const [products, setProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+
+  useEffect(() => {
+    fetchProducts().then((data) => {
+      setProducts(data);
+    });
+  }, []);
+
+  const handleSelectProduct = (product) => {
+    setSelectedProducts([...selectedProducts, product]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ProductList products={products} handleSelectProduct={handleSelectProduct} />
+      <Cart selectedProducts={selectedProducts} />
     </div>
   );
-}
+};
 
 export default App;
